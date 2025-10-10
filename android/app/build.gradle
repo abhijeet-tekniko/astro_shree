@@ -1,0 +1,61 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+}
+
+android {
+    namespace = "com.user.astro.kashi.astro_shree_user"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.user.astro.kashi.astro_shree_user"
+        minSdk = 23
+        targetSdk = 35
+        versionCode = 13
+        versionName = '1.0.13'
+        multiDexEnabled true
+    }
+
+
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\Windows 10\\Flutter Projects\\astro_kashi\\android\\app\\astrokashi-key.jks')
+            storePassword 'astrokashi123'
+            keyPassword 'astrokashi123'
+            keyAlias 'astrokashi123'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dependencies {
+        implementation platform('com.google.firebase:firebase-bom:33.15.0')
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    }
+}
+
+flutter {
+    source = "../.."
+}
+apply plugin: 'com.google.gms.google-services'

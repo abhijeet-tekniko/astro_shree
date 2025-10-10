@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "190449448915",
+    "project_id": "astrokashi-f6877",
+    "storage_bucket": "astrokashi-f6877.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190449448915:android:aa3a327cf776b642c52126",
+        "android_client_info": {
+          "package_name": "com.user.astro.kashi.astro_shree_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8N75H-HqEQEpOabtJvK4kZ5tW6RJwEVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
