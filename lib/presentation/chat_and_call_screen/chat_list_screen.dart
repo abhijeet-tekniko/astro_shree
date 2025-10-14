@@ -38,26 +38,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loading();
-      SocketService.initSocket(
-        profileApi.userProfile.value!.id.toString(),
-      );
       SocketService.on('astrologerStatus', _handleAstrologerStatus);
       SocketService.on('chatRequestSent', _handleChatRequestSent);
-
-      if (SocketService.socket == null) {
-        SocketService.initSocket(
-          // profileApi.userProfile.value!.id.toString(), context)
-          profileApi.userProfile.value!.id.toString(),
-        ).then((_) {
-          print('Socket initialized successfully');
-        }).catchError((e) {
-          print('Error initializing socket: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to initialize socket')),
-          );
-        });
-      }
     });
+    SocketService.initSocket(
+      profileApi.userProfile.value!.id.toString(),
+    );
   }
 
   void _handleAstrologerStatus(dynamic data) {

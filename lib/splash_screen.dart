@@ -27,23 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkLogin() async {
-    await profileApi.fetchProfile();
     bool log = await PrefsUtils.getBool(PrefsKeys.isLoggedIn);
     Timer(Duration(milliseconds: 1500), () {
       if (log == true) {
-        if (SocketService.socket == null) {
-          SocketService.initSocket(
-            // profileApi.userProfile.value!.id.toString(), context)
-            profileApi.userProfile.value!.id.toString(),
-          ).then((_) {
-            print('Socket initialized successfully');
-          }).catchError((e) {
-            print('Error initializing socket: $e');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to initialize socket')),
-            );
-          });
-        }
         Get.offAll(() => HomeScreen());
       } else {
         Get.offAll(() => SignUPScreen());

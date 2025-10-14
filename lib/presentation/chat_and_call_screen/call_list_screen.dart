@@ -32,6 +32,9 @@ class _CallListScreenState extends State<CallListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loading();
     });
+    SocketService.initSocket(
+      profileApi.userProfile.value!.id.toString(),
+    );
   }
 
   loading() async {
@@ -39,19 +42,6 @@ class _CallListScreenState extends State<CallListScreen> {
     astrologersApi.fetchAstrologers();
     await profileApi.fetchProfile();
 
-    if (SocketService.socket == null) {
-      SocketService.initSocket(
-        // profileApi.userProfile.value!.id.toString(), context)
-        profileApi.userProfile.value!.id.toString(),
-      ).then((_) {
-        print('Socket initialized successfully');
-      }).catchError((e) {
-        print('Error initializing socket: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to initialize socket')),
-        );
-      });
-    }
   }
 
   final VoiceCallController controller = Get.put(VoiceCallController());

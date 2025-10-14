@@ -23,15 +23,9 @@ class VoiceCallController extends GetxController {
   void onInit() {
     super.onInit();
     // Initialize socket with user ID and register listeners
-    SocketService.initSocket(profileApi.userProfile.value!.id.toString())
-        .then((_) {
-      print('Socket initialized for voice calls');
-      registerVoiceCallListeners();
-    }).catchError((e) {
-      print('Error initializing socket: $e');
-      errorMessage.value = 'Failed to initialize socket';
-      Get.snackbar('Error', 'Failed to connect to server');
-    });
+    SocketService.initSocket(
+      profileApi.userProfile.value!.id.toString(),
+    );
   }
 
   void registerVoiceCallListeners() {

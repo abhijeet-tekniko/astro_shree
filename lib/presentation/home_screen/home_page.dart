@@ -109,20 +109,9 @@ class _HomePageState extends State<HomePage> {
     await profileApi.fetchProfile();
     await langController.loadLanguage();
 
-    if (SocketService.socket == null) {
-      SocketService.initSocket(
-        // profileApi.userProfile.value!.id.toString(), context)
-        profileApi.userProfile.value!.id.toString(),
-      ).then((_) {
-        print('Socket initialized successfully');
-      }).catchError((e) {
-        print('Error initializing socket: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to initialize socket')),
-        );
-      });
-    }
-    // print('checkkkkAcrtiveData======${astrologersApi.activeSessionData.value.data!.type}');
+    SocketService.initSocket(
+      profileApi.userProfile.value!.id.toString(),
+    );
 
     if (astrologersApi.activeSessionData.value != null &&
         astrologersApi.activeSessionData.value.data != null) {

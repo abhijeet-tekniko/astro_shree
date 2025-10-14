@@ -5,6 +5,7 @@ import 'package:astro_shree_user/core/utils/themes/appThemes.dart';
 import 'package:astro_shree_user/presentation/chat_and_call_screen/call_screen.dart';
 import 'package:astro_shree_user/presentation/newChatScreen.dart';
 import 'package:astro_shree_user/presentation/signUp_screen/sign_up_screen.dart';
+import 'package:astro_shree_user/presentation/socket_services.dart';
 import 'package:astro_shree_user/routes/app_routes.dart';
 import 'package:astro_shree_user/services/firebase_service_file.dart';
 import 'package:astro_shree_user/splash_screen.dart';
@@ -33,6 +34,7 @@ Future<void> main() async {
 
   final langController = Get.put(LanguageController());
   await langController.loadLanguage();
+  Get.put(SocketService());
 
   runApp(MyApp());
 }

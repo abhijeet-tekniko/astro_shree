@@ -8,7 +8,8 @@ import 'newChatScreen.dart';
 import 'package:get/get.dart';
 
 ///25.7
-class SocketService {
+class SocketService extends GetxController {
+  static SocketService get to => Get.find();
   static IO.Socket? socket;
   static String? userId;
   static String userType = 'user';
@@ -34,13 +35,17 @@ class SocketService {
 
   /// Initialize socket
   static Future<void> initSocket(String userIdParam) async {
-    if (socket != null) return;
+    if (socket != null) {
+      print("Already Connected");
+      return;
+    }
 
     userId = userIdParam;
 
     socket = IO.io('http://167.71.232.245:4856', <String, dynamic>{
       'transports': ['websocket'],
-      'autoConnect': false,
+      'autoConnect': true,
+      'reconnection': true,
     });
 
     socket!.connect();
