@@ -407,9 +407,11 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       } else {
-                        return BannerWidget(
-                          imagePaths: bannerController.banner.value!.data!,
+                        return BannerCarouselSlider(
+                          banners: bannerController.banner.value!.data!,
                           autoPlay: true,
+                          horizontalPadding: 10,
+                          imageFit: BoxFit.fill,
                         );
                       }
                     }),

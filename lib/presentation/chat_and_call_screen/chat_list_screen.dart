@@ -43,8 +43,20 @@ class _ChatListScreenState extends State<ChatListScreen> {
       );
       SocketService.on('astrologerStatus', _handleAstrologerStatus);
       SocketService.on('chatRequestSent', _handleChatRequestSent);
-      SocketService.on('chatRequestAccepted', _handleChatRequestAccepted);
-      SocketService.on('chatRequestRejected', _handleChatRequestRejected);
+
+      if (SocketService.socket == null) {
+        SocketService.initSocket(
+          // profileApi.userProfile.value!.id.toString(), context)
+          profileApi.userProfile.value!.id.toString(),
+        ).then((_) {
+          print('Socket initialized successfully');
+        }).catchError((e) {
+          print('Error initializing socket: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to initialize socket')),
+          );
+        });
+      }
     });
   }
 

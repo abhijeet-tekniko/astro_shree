@@ -12,6 +12,7 @@ import '../../data/api_call/voice_call_controller.dart';
 import '../../widget/custom_buttons/custom_loading.dart';
 import '../../widget/homepagewidgets/top_astrologers_card.dart';
 import '../home_screen/home_screen.dart';
+import '../socket_services.dart';
 
 class CallListScreen extends StatefulWidget {
   const CallListScreen({super.key});
@@ -36,6 +37,21 @@ class _CallListScreenState extends State<CallListScreen> {
   loading() async {
     checkInternet.hasConnection();
     astrologersApi.fetchAstrologers();
+    await profileApi.fetchProfile();
+
+    if (SocketService.socket == null) {
+      SocketService.initSocket(
+        // profileApi.userProfile.value!.id.toString(), context)
+        profileApi.userProfile.value!.id.toString(),
+      ).then((_) {
+        print('Socket initialized successfully');
+      }).catchError((e) {
+        print('Error initializing socket: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to initialize socket')),
+        );
+      });
+    }
   }
 
   final VoiceCallController controller = Get.put(VoiceCallController());

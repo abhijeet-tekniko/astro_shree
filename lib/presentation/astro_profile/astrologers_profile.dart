@@ -1126,10 +1126,14 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: astrologersApi.astrologerDetail.value
-                                            .data!.services!.voice ==
+                                            .data!.isBusy ==
                                         true
-                                    ? Colors.green
-                                    : Colors.grey,
+                                    ? Colors.red.shade700
+                                    : astrologersApi.astrologerDetail.value
+                                                .data!.services!.voice ==
+                                            true
+                                        ? Colors.green
+                                        : Colors.grey,
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               padding: EdgeInsets.symmetric(
@@ -1339,11 +1343,15 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: astrologersApi.astrologerDetail.value.data!
-                                      .services!.video ==
+                          color: astrologersApi
+                                      .astrologerDetail.value.data!.isBusy ==
                                   true
-                              ? Colors.green
-                              : Colors.grey,
+                              ? Colors.red.shade700
+                              : astrologersApi.astrologerDetail.value.data!
+                                          .services!.video ==
+                                      true
+                                  ? Colors.green
+                                  : Colors.grey,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         alignment: Alignment.center,

@@ -57,10 +57,7 @@ class HomeScreenState extends State<HomeScreen> {
         HomePage(onItemSelected: _onItemTapped),
         ChatListScreen(),
         AstrologerListScreen(),
-        // LiveAstrologers(),
-
         CallListScreen(),
-        // UserLivePage(channelName: 'Hello', appId: '4b02d4dd07ba42ed983d64fd46552880', token: 'Hello123', userId: '681afdd7b2e75b1271480f4e',),
         ProfileScreen(isHome: false),
       ];
 
