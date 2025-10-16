@@ -27,8 +27,10 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
 
   @override
   void initState() {
-    controller.fetchPooja();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.fetchPooja();
+    });
   }
 
   @override

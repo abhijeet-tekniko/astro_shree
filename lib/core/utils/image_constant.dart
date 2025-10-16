@@ -83,6 +83,7 @@ class ImageConstant {//todo update
   static String chatActive = '$iconPath/chat_active.png';
   static String liveRed = '$iconPath/liveRed.png';
   static String liveInactive = '$iconPath/live_inactive.png';
+  static String remedies = 'assets/images/remedies.png';
   static String profileIcon = '$iconPath/profileIcon.png';
   static String profileActiveIcon = '$iconPath/profile_active.png';
 

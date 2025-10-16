@@ -16,7 +16,7 @@ import '../model/active_session_model.dart';
 import '../model/astrologers_model.dart';
 import '../model/chat_session_message_model.dart';
 import '../model/chat_session_model.dart';
-import '../model/get_my_session_model.dart'as session;
+import '../model/get_my_session_model.dart' as session;
 import '../model/not_respond_chat_model.dart';
 import '../model/notifyAstro_model.dart';
 import '../model/speciality_list_model.dart';
@@ -33,7 +33,6 @@ class AstrologersApi extends GetxController {
   List<SpecialityListData> specialities = [];
 
   ///live
-
 
   var mySessionList = Rxn<List<session.MySessionData>>();
   var astrologerDetail = GetConsultDetailModel().obs;
@@ -85,9 +84,34 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 1: $e');
     } finally {
       isLoading(false);
+    }
+  }
+
+  void handleAstrologerStatus(dynamic data) {
+    final index = astrologerList.value?.indexWhere(
+      (a) => a.id == data['astrologerId'],
+    );
+
+    if (index != null && index != -1) {
+      final oldList = [...astrologerList.value!];
+
+      final updatedAstrologer = oldList[index].copyWith(
+        status: data['status'],
+        isBusy: data['isBusy'] ?? false,
+      );
+
+      oldList.removeAt(index);
+
+      if (updatedAstrologer.status == 'online' &&
+          updatedAstrologer.isBusy == false) {
+        oldList.insert(0, updatedAstrologer);
+      } else {
+        oldList.insert(index, updatedAstrologer);
+      }
+      astrologerList.value = oldList;
     }
   }
 
@@ -115,7 +139,7 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 2: $e');
     } finally {
       isLoading(false);
     }
@@ -137,12 +161,11 @@ class AstrologersApi extends GetxController {
       if (response.statusCode == 200) {
         final specialityModel = SpecialityListModel.fromJson(response.data);
         if (specialityModel.data != null) {
-
-            specialities = [
-              SpecialityListData(sId: '', name: 'All', status: true), // Insert All at first
-              ...specialityModel.data!,
-            ];
-
+          specialities = [
+            SpecialityListData(
+                sId: '', name: 'All', status: true), // Insert All at first
+            ...specialityModel.data!,
+          ];
         }
       }
     } on dio_prefix.DioException catch (e) {
@@ -152,12 +175,11 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 3: $e');
     } finally {
       isLoading(false);
     }
   }
-
 
   Future<void> fetchLiveAstrologers(String? specialityId) async {
     isLoading(true);
@@ -171,15 +193,12 @@ class AstrologersApi extends GetxController {
       );
       var result = response.data;
       // log(result);
-      // print(result['message']);
-      print(response.statusCode.toString()+'Hellllll');
+      print(result['message']);
       if (response.statusCode == 200) {
         final astrologers = LiveAstrologerListModel.fromJson(response.data);
         astrologerLiveList.value = astrologers.data;
-        print(astrologerLiveList.value!.first.toString()+'Hellllll');
-      }
-      else{
-        astrologerLiveList.value=[];
+      } else {
+        astrologerLiveList.value = [];
       }
     } on dio_prefix.DioException catch (e) {
       HttpStatusHandler.handle(
@@ -188,7 +207,7 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 4: $e');
     } finally {
       isLoading(false);
     }
@@ -218,11 +237,12 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 5: $e');
     } finally {
       isLoading(false);
     }
   }
+
   Future<void> fetchAstrologersDetail({required String consultantId}) async {
     isDetailLoading(true);
     try {
@@ -247,14 +267,13 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 6: $e');
     } finally {
       isDetailLoading(false);
     }
   }
 
   Future<void> fetchChatSession() async {
-
     // isLoading.value=true;
     try {
       final token = await PrefsUtils.getString(PrefsKeys.userToken);
@@ -278,13 +297,14 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 7: $e');
     } finally {
       isLoading(false);
     }
   }
 
-  Future<void> fetchChatMessageSession({required String sessionId, String? from}) async {
+  Future<void> fetchChatMessageSession(
+      {required String sessionId, String? from}) async {
     isChatLoading(true);
     try {
       final token = await PrefsUtils.getString(PrefsKeys.userToken);
@@ -308,7 +328,7 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 8: $e');
     } finally {
       isChatLoading(false);
     }
@@ -350,7 +370,7 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 9: $e');
     } finally {
       isChatLoading(false);
     }
@@ -368,7 +388,7 @@ class AstrologersApi extends GetxController {
         ),
       );
       var result = response.data;
-    print('checkkkkkkkkkkkkNotRespond$result');
+      print('checkkkkkkkkkkkkNotRespond$result');
       print(result['message']);
       if (response.statusCode == 200) {
         final astrologers = NotRespondChatModel.fromJson(response.data);
@@ -381,7 +401,7 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 10: $e');
     } finally {
       isLoading(false);
     }
@@ -418,7 +438,7 @@ class AstrologersApi extends GetxController {
       );
       print('Dio Exception: ${e.message}');
     } catch (e) {
-      print('Unexpected error: $e');
+      print('Unexpected error 11: $e');
     } finally {
       isLoading(false);
     }
@@ -444,9 +464,7 @@ class AstrologersApi extends GetxController {
       final astrologers = RatingsResponse.fromJson(response.data);
       return astrologers.data;
     }
-    try {
-
-    } on dio_prefix.DioException catch (e) {
+    try {} on dio_prefix.DioException catch (e) {
       HttpStatusHandler.handle(
         statusCode: e.response?.statusCode,
         customSuccessMessage: "Error fetching astrologers",

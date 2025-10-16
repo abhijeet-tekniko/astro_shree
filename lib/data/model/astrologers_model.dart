@@ -114,6 +114,57 @@ class Astrologer {
     this.ratingCount,
   });
 
+  Astrologer copyWith({
+    String? status,
+    bool? isBusy,
+  }) {
+    return Astrologer(
+      id: id,
+      name: name,
+      email: email,
+      mobile: mobile,
+      status: status ?? this.status,
+      isBusy: isBusy ?? this.isBusy,
+      isExpert: isExpert,
+      isBlock: isBlock,
+      isVerify: isVerify,
+      otherPlatformWork: otherPlatformWork,
+      profileImage: profileImage,
+      about: about,
+      qualification: qualification,
+      experience: experience,
+      fcmToken: fcmToken,
+      pricing: pricing,
+      wallet: wallet,
+      services: services,
+      language: language,
+      speciality: speciality,
+      bankName: bankName,
+      ifscCode: ifscCode,
+      accountNumber: accountNumber,
+      gstNumber: gstNumber,
+      state: state,
+      city: city,
+      address: address,
+      pincode: pincode,
+      commission: commission,
+      adharFrontImage: adharFrontImage,
+      adharBackImage: adharBackImage,
+      panImage: panImage,
+      bankPassbookImage: bankPassbookImage,
+      cancelChecqueImage: cancelChecqueImage,
+      createdAt: createdAt,
+      poojaCommission: poojaCommission,
+      referralCommission: referralCommission,
+      maxWaitingTime: maxWaitingTime,
+      chatDuration: chatDuration,
+      callDuration: callDuration,
+      videoCallDuration: videoCallDuration,
+      ratingAverage: ratingAverage,
+      ratingCount: ratingCount,
+    );
+  }
+
   factory Astrologer.fromJson(Map<String, dynamic> json) {
     return Astrologer(
       id: json['_id'],

@@ -6,18 +6,18 @@ class DioClient {
   final Dio _dio;
 
   DioClient()
-      : _dio = Dio(
-          BaseOptions(
-            baseUrl: 'http://167.71.232.245:4856',
-            connectTimeout: const Duration(seconds: 25),
-            receiveTimeout: const Duration(seconds: 25),
-            sendTimeout: const Duration(seconds: 25),
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-          ),
-        ) {
+    : _dio = Dio(
+        BaseOptions(
+          baseUrl: 'http://167.71.232.245:4856',
+          connectTimeout: const Duration(seconds: 25),
+          receiveTimeout: const Duration(seconds: 25),
+          sendTimeout: const Duration(seconds: 25),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      ) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -27,8 +27,7 @@ class DioClient {
           }
           print(
             '➡️ Request: ${options.method} ${options.baseUrl}${options.path}',
-          );
-          print(
+          );   print(
             '➡️ Token: $token',
           );
           return handler.next(options);

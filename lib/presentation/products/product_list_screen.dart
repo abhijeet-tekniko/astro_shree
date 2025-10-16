@@ -62,7 +62,7 @@ class _CategoryPageState extends State<CategoryPage> {
             return controller.isLoading.value
                 ? ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: 6, // shimmer placeholders
+                    itemCount: 6,
                     padding: const EdgeInsets.all(12),
                     itemBuilder: (_, __) => Padding(
                       padding: const EdgeInsets.only(bottom: 12),
@@ -72,12 +72,12 @@ class _CategoryPageState extends State<CategoryPage> {
                 : ListView.separated(
                     padding: const EdgeInsets.all(12),
                     physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: controller.categoryListModel.value!.data!.length,
+                    itemCount:
+                        controller.categoryListModel.value?.data!.length ?? 0,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final category =
                           controller.categoryListModel.value!.data![index];
-                      print(category.sId);
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -275,7 +275,7 @@ class ProductListingPageState extends State<ProductListingPage> {
                       ),
                       physics: const AlwaysScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(12),
-                      itemCount: 6, // shimmer placeholders
+                      itemCount: 6,
                       itemBuilder: (_, __) => Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: shimmerPlaceholder(),
@@ -301,11 +301,10 @@ class ProductListingPageState extends State<ProductListingPage> {
                     padding: const EdgeInsets.all(12),
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 180, // Max width per item
+                        maxCrossAxisExtent: 210,
                         mainAxisSpacing: 12,
                         crossAxisSpacing: 12,
-                        childAspectRatio: screenHeight * 0.001090 //0.82,
-                        ),
+                        childAspectRatio: screenHeight * 0.001050),
                     itemCount: allProducts.length + (isLoading ? 1 : 0),
                     itemBuilder: (_, index) {
                       if (index == allProducts.length) {

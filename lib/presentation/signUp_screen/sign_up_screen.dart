@@ -63,7 +63,6 @@ class _SignUPScreenState extends State<SignUPScreen> {
                     fit: BoxFit.contain,
                   ),
                 ),
-
                 const SizedBox(height: 32),
                 IntlPhoneField(
                   decoration: InputDecoration(
@@ -79,6 +78,8 @@ class _SignUPScreenState extends State<SignUPScreen> {
                   initialCountryCode: 'IN',
                   controller: mobileController,
                   focusNode: mobileFocusNode,
+                  keyboardType: TextInputType.numberWithOptions(
+                      decimal: false, signed: false),
                   onChanged: (phone) {
                     selectedMobileNumber = phone.number;
                     selectedCountryCode = phone.countryCode;
@@ -89,37 +90,38 @@ class _SignUPScreenState extends State<SignUPScreen> {
                 ),
                 const SizedBox(height: 16),
                 Obx(
-                      () => ElevatedButton(
+                  () => ElevatedButton(
                     onPressed: signUpApi.isLoading.value
                         ? null
                         : () {
-                      if (selectedMobileNumber.length < 6) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Please enter a valid mobile number.',
-                            ),
-                          ),
-                        );
-                        return;
-                      }
-                      String fullNumber = "$selectedCountryCode$selectedMobileNumber";
-                      print(fullNumber);
-                      signUpApi.callSignUp(selectedMobileNumber,selectedCountryCode);
-                    },
+                            if (selectedMobileNumber.length < 6) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Please enter a valid mobile number.',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+                            String fullNumber =
+                                "$selectedCountryCode$selectedMobileNumber";
+                            print(fullNumber);
+                            signUpApi.callSignUp(
+                                selectedMobileNumber, selectedCountryCode);
+                          },
                     child: signUpApi.isLoading.value
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
-                      'Get OTP',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                            'Get OTP',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
-
                 const SizedBox(height: 8),
                 RichText(
                   text: TextSpan(
@@ -129,25 +131,23 @@ class _SignUPScreenState extends State<SignUPScreen> {
                       TextSpan(
                         text: 'Terms of Use',
                         style: TextStyles.caption1,
-                        recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = () {
-                                NavigatorService.pushNamed(
-                                  AppRoutes.termScreen,
-                                );
-                              },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            NavigatorService.pushNamed(
+                              AppRoutes.termScreen,
+                            );
+                          },
                       ),
                       TextSpan(text: ' and '),
                       TextSpan(
                         text: 'Privacy Policy',
                         style: TextStyles.caption1,
-                        recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = () {
-                                NavigatorService.pushNamed(
-                                  AppRoutes.privacyScreen,
-                                );
-                              },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            NavigatorService.pushNamed(
+                              AppRoutes.privacyScreen,
+                            );
+                          },
                       ),
                     ],
                   ),

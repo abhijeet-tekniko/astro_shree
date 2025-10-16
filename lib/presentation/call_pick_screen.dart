@@ -464,7 +464,7 @@ class _CallScreenState extends State<CallPickScreen>
 //             ),
 //             Padding(
 //               padding: const EdgeInsets.only(top:335.0),
-//               child: Text('AstroShree',style: TextStyle(fontSize: 42,fontWeight: FontWeight.bold,color: Color(0xFFC62828)),),
+//               child: Text('AstroRemedy',style: TextStyle(fontSize: 42,fontWeight: FontWeight.bold,color: Color(0xFFC62828)),),
 //             ),
 //             Column(
 //               mainAxisAlignment: MainAxisAlignment.spaceBetween,

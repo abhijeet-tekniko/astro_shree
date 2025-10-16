@@ -35,7 +35,7 @@ class TopAstrologersCard extends StatelessWidget {
 
     return Container(
       width: screenWidth * 0.30,
-      height: screenHeight*0.23,
+      height: screenHeight * 0.23,
       margin: const EdgeInsets.symmetric(horizontal: 5),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -53,10 +53,9 @@ class TopAstrologersCard extends StatelessWidget {
                 height: screenHeight * 0.1,
                 width: screenHeight * 0.1,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  // color: const Color(0xFFFFD9DB),
-                  border: Border.all(color: Color(0xFFC62828),width: 1)
-                ),
+                    shape: BoxShape.circle,
+                    // color: const Color(0xFFFFD9DB),
+                    border: Border.all(color: Color(0xFFC62828), width: 1)),
                 child: CustomImageView(
                   // margin: const EdgeInsets.symmetric(horizontal: 5),
                   // height: screenHeight * 0.1,
@@ -66,7 +65,6 @@ class TopAstrologersCard extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
-
             ],
           ),
           // const SizedBox(width: 10),
@@ -74,22 +72,26 @@ class TopAstrologersCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             name,
-            style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
             overflow: TextOverflow.ellipsis,
           ),
-          Text("$charge/min", style: TextStyle(fontSize: 12,color: Colors.grey.shade800)),
+          Text("$charge/min",
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade800)),
           const SizedBox(width: 8),
           Container(
-            height: screenHeight*0.03,
-           width: screenWidth*0.2,
-           alignment: Alignment.center,
-           decoration: BoxDecoration(
-             // border: Border.all(color: Color(0xFFC62828),),
-             border: Border.all(color: Colors.green.shade800),
-             borderRadius: BorderRadius.circular(20)
-
-           ),
-            child: Text('Chat',style: TextStyle(color: Colors.green.shade800,),),
+            height: screenHeight * 0.03,
+            width: screenWidth * 0.2,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                // border: Border.all(color: Color(0xFFC62828),),
+                border: Border.all(color: Colors.green.shade800),
+                borderRadius: BorderRadius.circular(20)),
+            child: Text(
+              'Chat',
+              style: TextStyle(
+                color: Colors.green.shade800,
+              ),
+            ),
           )
           // SizedBox(
           //   height: screenHeight * 0.02,
@@ -119,7 +121,6 @@ class TopAstrologersCard extends StatelessWidget {
     );
   }
 }
-
 
 /*
 class TopAstrologersCard extends StatelessWidget {
@@ -303,7 +304,6 @@ class TopAstrologersCard extends StatelessWidget {
 }
 */
 
-
 class TopAstrologersListCard extends StatelessWidget {
   final String imageUrl;
   final String name;
@@ -321,7 +321,7 @@ class TopAstrologersListCard extends StatelessWidget {
   final VoidCallback onPressed;
   final VoidCallback onTap;
 
-   TopAstrologersListCard({
+  TopAstrologersListCard({
     super.key,
     required this.imageUrl,
     required this.name,
@@ -335,7 +335,9 @@ class TopAstrologersListCard extends StatelessWidget {
     required this.isPopular,
     required this.experience,
     required this.onPressed,
-    required this.onTap, required this.isChat, required this.comesFrom,
+    required this.onTap,
+    required this.isChat,
+    required this.comesFrom,
   });
 
   @override
@@ -353,9 +355,8 @@ class TopAstrologersListCard extends StatelessWidget {
         Color buttonColor;
         String statusText;
 
-        if(comesFrom=='chat'&& isChat==false){
-          status="isBusy";
-
+        if (comesFrom == 'chat' && isChat == false) {
+          status = "isBusy";
         }
         switch (status!.toLowerCase()) {
           case 'online':
@@ -429,7 +430,7 @@ class TopAstrologersListCard extends StatelessWidget {
                         SizedBox(
                           height: 17,
                           width: 80,
-                          child:  RatingBar.builder(
+                          child: RatingBar.builder(
                             initialRating: 5,
                             minRating: 1,
                             direction: Axis.horizontal,
@@ -438,7 +439,8 @@ class TopAstrologersListCard extends StatelessWidget {
                             itemSize: 14.0,
                             itemPadding: EdgeInsets.only(top: 6.0),
                             itemBuilder: (context, index) => Icon(
-                             /* index.isEven ?*/ Icons.star ,/*: Icons.star_border,*/
+                              /* index.isEven ?*/ Icons.star,
+                              /*: Icons.star_border,*/
                               color: Colors.amber,
                               size: 6,
                             ),
@@ -448,7 +450,6 @@ class TopAstrologersListCard extends StatelessWidget {
                               // });
                             },
                           ),
-
                         ),
                         // Container(
                         //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -516,8 +517,9 @@ class TopAstrologersListCard extends StatelessWidget {
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                    ),   Text(
-                      "Exp- $experience Years" ,
+                    ),
+                    Text(
+                      "Exp- $experience Years",
                       style: TextStyle(
                         fontSize: isTablet ? 14 : 12,
                         color: secondaryColor.withOpacity(0.7),
@@ -542,7 +544,8 @@ class TopAstrologersListCard extends StatelessWidget {
                 children: [
                   if (isPopular && !isBusy)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: accentColor,
                         borderRadius: BorderRadius.circular(8),
@@ -558,13 +561,16 @@ class TopAstrologersListCard extends StatelessWidget {
                     ),
                   if (isBusy)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: primaryColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        "$maxDuration min",
+                        int.tryParse(maxDuration)! > 3600
+                            ? "<60 min"
+                            : "${int.tryParse(maxDuration)! / 60} min",
                         style: TextStyle(
                           fontSize: isTablet ? 12 : 10,
                           color: accentColor,
@@ -573,55 +579,66 @@ class TopAstrologersListCard extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(height: 8),
-                 comesFrom=="selectAstro"?SizedBox.shrink(): SizedBox(
-                    width: isTablet ? 140 : 100,
-                    height: isTablet ? 40 : 34,
-                    child: ElevatedButton/*.icon*/(
-                      onPressed: status == "online" ? onPressed : () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              status == "isBusy"
-                                  ? "Astrologer is currently busy"
-                                  : "Please wait for the astrologer to come online",
+                  comesFrom == "selectAstro"
+                      ? SizedBox.shrink()
+                      : SizedBox(
+                          width: isTablet ? 140 : 100,
+                          height: isTablet ? 40 : 34,
+                          child: ElevatedButton /*.icon*/ (
+                            onPressed: status == "online"
+                                ? onPressed
+                                : () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          status == "isBusy"
+                                              ? "Astrologer is currently busy"
+                                              : "Please wait for the astrologer to come online",
+                                        ),
+                                        backgroundColor: buttonColor,
+                                        duration: const Duration(seconds: 3),
+                                      ),
+                                    );
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              // backgroundColor:isBusy?primaryColor: buttonColor,
+                              foregroundColor: Colors.white,
+                              // side: BorderSide(
+                              //   color: isBusy ? primaryColor : buttonColor,  // Set border color
+                              //   width: 2.0, // Border width (adjust as needed)
+                              // ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  color: isBusy
+                                      ? primaryColor
+                                      : buttonColor, // Set border color
+                                  width: 1.0, // Border width (adjust as needed)
+                                ),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                             ),
-                            backgroundColor: buttonColor,
-                            duration: const Duration(seconds: 3),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        // backgroundColor:isBusy?primaryColor: buttonColor,
-                        foregroundColor: Colors.white,
-                        // side: BorderSide(
-                        //   color: isBusy ? primaryColor : buttonColor,  // Set border color
-                        //   width: 2.0, // Border width (adjust as needed)
-                        // ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(
-                            color: isBusy ? primaryColor : buttonColor,  // Set border color
-                            width: 1.0, // Border width (adjust as needed)
+                            // icon: Icon(
+                            //   isCall ? Icons.call : isBusy?Icons.do_disturb_off:Icons.chat,
+                            //   size: isTablet ? 18 : 16,
+                            //   color: Colors.white,
+                            // ),
+                            child: Text(
+                              isBusy
+                                  ? "Notify"
+                                  : isCall
+                                      ? "Call"
+                                      : "Chat",
+                              style: TextStyle(
+                                fontSize: isTablet ? 14 : 14,
+                                fontWeight: FontWeight.bold,
+                                color: isBusy ? primaryColor : buttonColor,
+                              ),
+                            ),
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                      ),
-                      // icon: Icon(
-                      //   isCall ? Icons.call : isBusy?Icons.do_disturb_off:Icons.chat,
-                      //   size: isTablet ? 18 : 16,
-                      //   color: Colors.white,
-                      // ),
-                      child: Text(
-                        isBusy?"Notify":   isCall ? "Call" : "Chat",
-                        style: TextStyle(
-                          fontSize: isTablet ? 14 : 14,
-                          fontWeight: FontWeight.bold,
-                          color: isBusy?primaryColor: buttonColor,
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ],

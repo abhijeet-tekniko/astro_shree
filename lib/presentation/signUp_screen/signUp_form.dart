@@ -256,6 +256,7 @@ class _NewSignUpScreenState extends State<NewSignUpScreen> {
                         title: "Mobile Number",
                         textEditingController: mobileNumberController,
                         inputType: TextInputType.phone,
+                        readOnly: true,
                         maxLength: 10,
                       ),
                       inputTextFields(

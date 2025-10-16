@@ -1,8 +1,10 @@
 import 'package:astro_shree_user/data/api_call/astrologers_api.dart';
 import 'package:astro_shree_user/widget/custom_buttons/custom_loading.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../core/network/endpoints.dart';
 import '../core/utils/themes/appThemes.dart';
 import '../data/model/chat_session_model.dart';
@@ -126,7 +128,7 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ChatSessionDetailsScreen(id: session.sId.toString(),astroName: session.astrologer!.name.toString(),),
+                        builder: (_) => ChatSessionDetailsScreen(sessionId: session.sId.toString()),
                       ),
                     );
                   },
@@ -140,19 +142,12 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
   }
 }
 
-// class ChatSessionsScreen extends StatefulWidget {
-//   const ChatSessionsScreen({super.key});
-//
-//   @override
-//   State<ChatSessionsScreen> createState() => _ChatSessionsScreenState();
-// }
-//
-// class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
-//   final AstrologersApi controller = Get.put(AstrologersApi());
+// class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
+//   final AstrologersApi controller = Get.find<AstrologersApi>();
 //
 //   @override
 //   void initState() {
-//     controller.fetchChatSession();
+//     controller.fetchChatMessageSession(sessionId: widget.id.toString()); // Assuming this method exists
 //     super.initState();
 //   }
 //
@@ -165,82 +160,115 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
 //         ),
 //         backgroundColor: Colors.white,
 //         iconTheme: AppTheme.lightTheme.appBarTheme.iconTheme,
-//         title:  AppbarTitle(text: 'Chat Sessions'),
+//         title:  AppbarTitle(text: widget.astroName.toString()),
 //         centerTitle: true,
 //       ),
+//       // appBar: AppBar(
+//       //   title: Text('Chat with ${}'),
+//       //   centerTitle: true,
+//       //   elevation: 0,
+//       //   backgroundColor: Colors.blue[700],
+//       // ),
 //       body: Obx(() {
-//         if (controller.isLoading.value) {
+//         if (controller.isChatLoading.value) {
 //           return const Center(child: CustomLoadingScreen());
 //         }
-//         final chatSession = controller.chatSessionList.value;
-//         if (chatSession == null || chatSession.isEmpty) {
-//           return const Center(child: Text('No chat sessions found'));
+//         final messages = controller.chatSessionMessage.value!.data; // Assuming this is a List<ChatMessage>
+//         if (messages == null || messages.isEmpty) {
+//           return const Center(child: Text('No messages found'));
 //         }
-//
 //         return ListView.builder(
 //           padding: const EdgeInsets.all(16),
-//           itemCount: chatSession.length,
+//           itemCount: messages.length,
 //           itemBuilder: (context, index) {
-//             final session = chatSession[index];
-//             final date = DateTime.parse(session.startedAt.toString());
-//             final formattedDate = DateFormat('MMM dd, yyyy • hh:mm a').format(date);
-//             return Card(
-//               elevation: 2,
-//               margin: const EdgeInsets.symmetric(vertical: 8),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(12),
-//               ),
-//               child: ListTile(
-//                 contentPadding: const EdgeInsets.all(16),
-//                 leading: CircleAvatar(
-//                   backgroundColor: Colors.red[100],
-//                   child: Icon(
-//                     Icons.chat,
-//                     color: Colors.red[700],
-//                   ),
-//                 ),
-//                 title: Text(
-//                   'Chat with ${session.astrologer?.name ?? "Unknown"}',
-//                   style: const TextStyle(
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 16,
-//                   ),
-//                 ),
-//                 subtitle: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
+//             final message = messages[index];
+//             final isUser = message.senderModel == 'User';
+//             final timestamp = DateTime.parse(message.timestamp.toString());
+//             final formattedTime = DateFormat('MMM dd, yyyy • hh:mm a').format(timestamp);
+//
+//             return Column(
+//               crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+//               children: [
+//                 Row(
+//                   mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
 //                   children: [
-//                     const SizedBox(height: 4),
-//                     Text(
-//                       formattedDate,
-//                       style: TextStyle(
-//                         color: Colors.grey[600],
-//                         fontSize: 14,
+//                     // if (!isUser)
+//                     //   CircleAvatar(
+//                     //     radius: 20,
+//                     //     backgroundImage: message.sender?.profileImage != null
+//                     //         ? NetworkImage(EndPoints.imageBaseUrl+message.sender!.profileImage!)
+//                     //         : null,
+//                     //     child: message.sender?.profileImage == null
+//                     //         ? Text(message.sender?.name?[0] ?? 'A')
+//                     //         : null,
+//                     //   ),
+//                     // const SizedBox(width: 8),
+//                     Flexible(
+//                       child: Container(
+//                         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+//                         padding: const EdgeInsets.all(12),
+//                         decoration: BoxDecoration(
+//                           color: isUser ? const Color(0xFFFFCDD2) : Colors.white,
+//                           // color: isUser ? Colors.red[100] : Colors.grey[300],
+//                           borderRadius: BorderRadius.only(
+//                             topLeft: const Radius.circular(12),
+//                             topRight: const Radius.circular(12),
+//                             bottomLeft: isUser ? const Radius.circular(12) : const Radius.circular(0),
+//                             bottomRight: isUser ? const Radius.circular(0) : const Radius.circular(12),
+//                           ),
+//                         ),
+//                         constraints: BoxConstraints(
+//                           maxWidth: MediaQuery.of(context).size.width * 0.65,
+//                         ),
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               message.message??"",
+//                               style: TextStyle(
+//                                 // color: isUser ? Colors.white : Colors.black87,
+//                                 color: Colors.black,
+//                                 fontSize: 12,
+//                               ),
+//                             ),
+//                             const SizedBox(height: 4),
+//                             Text(
+//                               formattedTime,
+//                               style: TextStyle(
+//                                 color: Colors.black,
+//                                 // color: isUser ? Colors.white70 : Colors.grey[600],
+//                                 fontSize: 10,
+//                               ),
+//                             ),
+//                           ],
+//                         ),
 //                       ),
 //                     ),
-//                     const SizedBox(height: 4),
-//                     Text(
-//                       'Status: ${session.status.toString().toUpperCase()}',
-//                       style: TextStyle(
-//                         color: session.status == 'active' ? Colors.green : Colors.red,
-//                         fontSize: 14,
-//                       ),
-//                     ),
+//                     if (isUser)
+//                       const SizedBox(width: 8),
+//                     // if (isUser)
+//                     //   CircleAvatar(
+//                     //     radius: 20,
+//                     //     backgroundImage: message.sender?.profileImage != null
+//                     //         ? NetworkImage(EndPoints.imageBaseUrl+message.sender!.profileImage!)
+//                     //         : null,
+//                     //     child: message.sender?.profileImage == null
+//                     //         ? Text(message.sender?.name?[0] ?? 'U')
+//                     //         : null,
+//                     //   ),
 //                   ],
 //                 ),
-//                 trailing: Icon(
-//                   Icons.arrow_forward_ios,
-//                   color: Colors.grey[600],
-//                   size: 16,
-//                 ),
-//                 onTap: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (context) => ChatSessionDetailsScreen(session: session),
-//                     ),
-//                   );
-//                 },
-//               ),
+//                 // Padding(
+//                 //   padding: EdgeInsets.only(
+//                 //     left: isUser ? 0 : 44,
+//                 //     right: isUser ? 44 : 0,
+//                 //   ),
+//                 //   child: CustomPaint(
+//                 //     size: const Size(12, 8),
+//                 //     painter: NotchPainter(isUser: isUser),
+//                 //   ),
+//                 // ),
+//               ],
 //             );
 //           },
 //         );
@@ -250,21 +278,21 @@ class _ChatSessionsScreenState extends State<ChatSessionsScreen> {
 // }
 
 class ChatSessionDetailsScreen extends StatefulWidget {
-  final String id;
-  final String astroName;
+  final String sessionId;
 
-  const ChatSessionDetailsScreen({super.key, required this.id, required this.astroName});
+  const ChatSessionDetailsScreen({super.key, required this.sessionId});
 
   @override
-  State<ChatSessionDetailsScreen> createState() => _ChatSessionDetailsScreenState();
+  State<ChatSessionDetailsScreen> createState() =>
+      _ChatSessionDetailsScreenState();
 }
 
 class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
-  final AstrologersApi controller = Get.find<AstrologersApi>();
+  final AstrologersApi controller = Get.put(AstrologersApi());
 
   @override
   void initState() {
-    controller.fetchChatMessageSession(sessionId: widget.id.toString()); // Assuming this method exists
+    controller.fetchChatMessageSession(sessionId: widget.sessionId.toString());
     super.initState();
   }
 
@@ -277,20 +305,14 @@ class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
         ),
         backgroundColor: Colors.white,
         iconTheme: AppTheme.lightTheme.appBarTheme.iconTheme,
-        title:  AppbarTitle(text: widget.astroName.toString()),
+        title:  AppbarTitle(text: "Detailed Chat"),
         centerTitle: true,
       ),
-      // appBar: AppBar(
-      //   title: Text('Chat with ${}'),
-      //   centerTitle: true,
-      //   elevation: 0,
-      //   backgroundColor: Colors.blue[700],
-      // ),
       body: Obx(() {
         if (controller.isChatLoading.value) {
-          return const Center(child: CustomLoadingScreen());
+          return const Center(child: CircularProgressIndicator());
         }
-        final messages = controller.chatSessionMessage.value!.data; // Assuming this is a List<ChatMessage>
+        final messages = controller.chatSessionMessage.value!.data;
         if (messages == null || messages.isEmpty) {
           return const Center(child: Text('No messages found'));
         }
@@ -299,39 +321,38 @@ class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
           itemCount: messages.length,
           itemBuilder: (context, index) {
             final message = messages[index];
-            final isUser = message.senderModel == 'User';
-            final timestamp = DateTime.parse(message.timestamp.toString());
-            final formattedTime = DateFormat('MMM dd, yyyy • hh:mm a').format(timestamp);
+            final isAstro = message.senderModel == 'Astrologer';
+            final media = message.media;
+            final timestamp = DateTime.parse(message.createdAtIST.toString());
+            final formattedTime =
+            DateFormat('MMM dd, yyyy • hh:mm a').format(timestamp);
 
             return Column(
-              crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment:
+              isAstro ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                  mainAxisAlignment:
+                  isAstro ? MainAxisAlignment.end : MainAxisAlignment.start,
                   children: [
-                    // if (!isUser)
-                    //   CircleAvatar(
-                    //     radius: 20,
-                    //     backgroundImage: message.sender?.profileImage != null
-                    //         ? NetworkImage(EndPoints.imageBaseUrl+message.sender!.profileImage!)
-                    //         : null,
-                    //     child: message.sender?.profileImage == null
-                    //         ? Text(message.sender?.name?[0] ?? 'A')
-                    //         : null,
-                    //   ),
-                    // const SizedBox(width: 8),
                     Flexible(
                       child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 8),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: isUser ? const Color(0xFFFFCDD2) : Colors.white,
-                          // color: isUser ? Colors.red[100] : Colors.grey[300],
+                          color: isAstro
+                              ? Colors.red.shade50
+                              : Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: const Radius.circular(12),
                             topRight: const Radius.circular(12),
-                            bottomLeft: isUser ? const Radius.circular(12) : const Radius.circular(0),
-                            bottomRight: isUser ? const Radius.circular(0) : const Radius.circular(12),
+                            bottomLeft: isAstro
+                                ? const Radius.circular(12)
+                                : const Radius.circular(0),
+                            bottomRight: isAstro
+                                ? const Radius.circular(0)
+                                : const Radius.circular(12),
                           ),
                         ),
                         constraints: BoxConstraints(
@@ -340,20 +361,61 @@ class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              message.message??"",
-                              style: TextStyle(
-                                // color: isUser ? Colors.white : Colors.black87,
-                                color: Colors.black,
-                                fontSize: 12,
+                            if (message.message != null)
+                              Text(
+                                message.message ?? "",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
+                            if (media != null && media.isNotEmpty) ...[
+                              SizedBox(height: 5),
+                              Wrap(
+                                spacing: 5,
+                                runSpacing: 5,
+                                children: media.map((m) {
+                                  final url =
+                                      'http://167.71.232.245:4856/${m.url}';
+                                  if (m.type == 'image') {
+                                    print(url);
+                                    return GestureDetector(
+                                      onTap: () => _launchURL(url),
+                                      child: CachedNetworkImage(
+                                        imageUrl: url,
+                                        width: 300,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator()),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error,
+                                                color: Colors.red),
+                                      ),
+                                    );
+                                  } else {
+                                    return GestureDetector(
+                                      onTap: () => _launchURL(url),
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          m.fileName ?? "",
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            decoration:
+                                            TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }).toList(),
+                              ),
+                            ],
                             const SizedBox(height: 4),
                             Text(
                               formattedTime,
                               style: TextStyle(
                                 color: Colors.black,
-                                // color: isUser ? Colors.white70 : Colors.grey[600],
                                 fontSize: 10,
                               ),
                             ),
@@ -361,36 +423,26 @@ class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
                         ),
                       ),
                     ),
-                    if (isUser)
-                      const SizedBox(width: 8),
-                    // if (isUser)
-                    //   CircleAvatar(
-                    //     radius: 20,
-                    //     backgroundImage: message.sender?.profileImage != null
-                    //         ? NetworkImage(EndPoints.imageBaseUrl+message.sender!.profileImage!)
-                    //         : null,
-                    //     child: message.sender?.profileImage == null
-                    //         ? Text(message.sender?.name?[0] ?? 'U')
-                    //         : null,
-                    //   ),
+                    if (isAstro) const SizedBox(width: 8),
                   ],
                 ),
-                // Padding(
-                //   padding: EdgeInsets.only(
-                //     left: isUser ? 0 : 44,
-                //     right: isUser ? 44 : 0,
-                //   ),
-                //   child: CustomPaint(
-                //     size: const Size(12, 8),
-                //     painter: NotchPainter(isUser: isUser),
-                //   ),
-                // ),
               ],
             );
           },
         );
       }),
     );
+  }
+
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open file')),
+      );
+    }
   }
 }
 

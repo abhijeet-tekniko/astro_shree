@@ -33,6 +33,7 @@ import '../../core/network/no_internet_page.dart';
 import '../../data/api_call/banner_controller.dart';
 import '../../data/api_call/language_controller.dart';
 import '../../data/api_call/member_controller.dart';
+import '../../data/api_call/product_controller.dart';
 import '../../data/api_call/profile_api.dart';
 import '../../services/firebase_service_file.dart';
 import '../astro_profile/astrologers_profile.dart';
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   final BlogApi blogApi = Get.put(BlogApi());
   final AstrologersApi astrologersApi = Get.put(AstrologersApi());
   final ProfileApi profileApi = Get.put(ProfileApi());
+  final productApi = Get.put(ProductController());
   final BannerController bannerController = Get.put(BannerController());
   var selectedUniLanguage = 'en';
   Future<bool> _onWillPop() async {
@@ -99,6 +101,7 @@ class _HomePageState extends State<HomePage> {
     profileApi.fetchIsNewUser();
     checkInternet.hasConnection();
     astrologersApi.fetchAstrologers();
+    productApi.fetchCategory();
     astrologersApi.fetchSpeciality();
     astrologersApi.fetchLiveAstrologers("");
     astrologersApi.fetchActiveSession();
@@ -120,30 +123,27 @@ class _HomePageState extends State<HomePage> {
           context,
           MaterialPageRoute(
             builder: (context) => ChatNewwScreen(
-              chatSessionId:
-                  astrologersApi.activeSessionData.value.data!.chatSessionId ??
-                      '',
-              astrologerName: astrologersApi
-                      .activeSessionData.value.data!.astrologer?.name ??
-                  '',
-              astrologerId: astrologersApi
-                      .activeSessionData.value.data!.astrologer?.sId ??
-                  '',
-              astrologerImage: EndPoints.imageBaseUrl +
-                      astrologersApi.activeSessionData.value.data!.astrologer!
-                          .profileImage
-                          .toString() ??
-                  '',
-              maxDuartion: astrologersApi
-                      .activeSessionData.value.data!.remainingTime
-                      .toString() ??
-                  '',
-              // chatPrice: 10,
-            ),
+                chatSessionId: astrologersApi
+                        .activeSessionData.value.data!.chatSessionId ??
+                    '',
+                astrologerName: astrologersApi
+                        .activeSessionData.value.data!.astrologer?.name ??
+                    '',
+                astrologerId: astrologersApi
+                        .activeSessionData.value.data!.astrologer?.sId ??
+                    '',
+                astrologerImage: EndPoints.imageBaseUrl +
+                        astrologersApi.activeSessionData.value.data!.astrologer!
+                            .profileImage
+                            .toString() ??
+                    '',
+                maxDuartion: astrologersApi
+                    .activeSessionData.value.data!.remainingTime
+                    .toString()),
           ),
         );
       } else if (astrologersApi.activeSessionData.value.data!.type == 'voice') {
-        Fluttertoast.showToast(msg: 'You have an active Voice Call Session');
+        // Fluttertoast.showToast(msg: 'You have an active Voice Call Session');
       }
     } else {
       return SizedBox.shrink();
@@ -227,9 +227,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       imagePath:
                                           ImageConstant.newDailyHoroscope,
-                                      // imagePath: ImageConstant.dailyHoroscopeIcon,
                                       fit: BoxFit.fill,
-                                      // color: Color(0xFFC62828),
                                       radius: BorderRadius.circular(40),
                                     ),
                                   ),
@@ -426,8 +424,6 @@ class _HomePageState extends State<HomePage> {
 
                       if (astrologers == null || astrologers.isEmpty) {
                         return SizedBox.shrink();
-                        // return const Center(
-                        //     child: Text('No astrologers found.'));
                       }
 
                       return Column(
@@ -436,9 +432,7 @@ class _HomePageState extends State<HomePage> {
                           listHeader(
                             screenWidth,
                             "Live Session",
-                            () {
-                              // widget.onItemSelected(1);
-                            },
+                            () {},
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 5),
@@ -451,10 +445,6 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 final liveAstro = astrologersApi
                                     .astrologerLiveList.value![index];
-
-                                // DateTime dateTime = DateTime.parse(liveAstro.);
-                                //
-                                // String formattedTime = DateFormat('hh:mm a').format(dateTime);
                                 return LiveFullScreenCard(
                                   imageUrl: EndPoints.imageBaseUrl +
                                       liveAstro.profileImage.toString(),
@@ -465,11 +455,8 @@ class _HomePageState extends State<HomePage> {
                                       "Vedic Astrology",
                                   isLive: true,
                                   onPressed: () {
-                                    print(profileApi.userProfile.value!.id
-                                            .toString() +
-                                        'x');
-                                    // controller.initSocketListeners(profileApi.userProfile.value!.id.toString(),);
-                                    // controller.joinLiveSession(liveAstro.liveSession!.liveSessionId.toString(),profileApi.userProfile.value!.id.toString(),);
+                                    print(
+                                        '${profileApi.userProfile.value!.id}x');
                                     Get.to(() => UserLiveScreen(
                                           userId: profileApi
                                               .userProfile.value!.id
@@ -501,8 +488,6 @@ class _HomePageState extends State<HomePage> {
 
                       if (astrologers == null || astrologers.isEmpty) {
                         return SizedBox.shrink();
-                        // return const Center(
-                        //     child: Text('No astrologers found.'));
                       }
 
                       return Column(
@@ -514,13 +499,10 @@ class _HomePageState extends State<HomePage> {
                               Get.to(() => MySessionListScreen(
                                     sessionData: astrologers,
                                   ));
-
-                              // widget.onItemSelected(1);
                             },
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
-                                // vertical: screenWidth * 0.020,
                                 horizontal: screenWidth * 0.025),
                             height: screenHeight * 0.18,
                             child: SingleChildScrollView(
@@ -625,12 +607,8 @@ class _HomePageState extends State<HomePage> {
                                                                 MaterialPageRoute(
                                                                   builder: (_) =>
                                                                       ChatSessionDetailsScreen(
-                                                                    id: astro
+                                                                    sessionId: astro
                                                                         .sId
-                                                                        .toString(),
-                                                                    astroName: astro
-                                                                        .astrologer!
-                                                                        .name
                                                                         .toString(),
                                                                   ),
                                                                 ),
@@ -725,10 +703,10 @@ class _HomePageState extends State<HomePage> {
                       );
                     }),
 
-                    ///AstroShree Remedies
+                    ///AstroRemedy Remedies
                     listHeader(
                       screenWidth,
-                      "AstroShree Remedies",
+                      "AstroRemedy Remedies",
                       viewAll: false,
                       () {},
                     ),
@@ -1296,14 +1274,14 @@ class _HomePageState extends State<HomePage> {
                         ? Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenWidth * 0.035),
-                            child: Text("AstroShree in News",
+                            child: Text("AstroRemedy in News",
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold)),
                           )
 
                         /*,  listHeader(
                       screenWidth,
-                      "AstroShree in News",
+                      "AstroRemedy in News",
                       () {
                         Get.to(() => BlogListScreen());
                       },
@@ -1779,9 +1757,7 @@ class _MySessionListScreenState extends State<MySessionListScreen> {
                                         MaterialPageRoute(
                                           builder: (_) =>
                                               ChatSessionDetailsScreen(
-                                            id: astro.sId.toString(),
-                                            astroName: astro.astrologer!.name
-                                                .toString(),
+                                            sessionId: astro.sId.toString(),
                                           ),
                                         ),
                                       );

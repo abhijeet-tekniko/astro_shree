@@ -55,6 +55,16 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 335.0),
+            child: Text(
+              'AstroShree',
+              style: TextStyle(
+                  fontSize: 42,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFC62828)),
+            ),
+          )
         ],
       ),
     );

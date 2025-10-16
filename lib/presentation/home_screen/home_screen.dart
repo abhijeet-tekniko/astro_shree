@@ -15,7 +15,8 @@ import '../../data/api_call/profile_api.dart';
 import '../../data/api_call/recharge_list_api.dart';
 import '../active_session_screen.dart';
 import '../profile_screen/profile_screen.dart';
-
+import '../remedy/remedies_home.dart';
+import '../socket_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,11 +35,9 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   final CheckInternet checkInternet = Get.put(CheckInternet());
   final BlogApi blogApi = Get.put(BlogApi());
   final BannerController bannerController = Get.put(BannerController());
-
   final ProfileApi profileApi = Get.put(ProfileApi());
   final RechargeListApi rechargeListApi = Get.put(RechargeListApi());
   final AstrologersApi astrologersApi = Get.put(AstrologersApi());
@@ -56,18 +55,25 @@ class HomeScreenState extends State<HomeScreen> {
   List<Widget> get _pages => [
         HomePage(onItemSelected: _onItemTapped),
         ChatListScreen(),
-        AstrologerListScreen(),
+        RemediesHome(),
         CallListScreen(),
         ProfileScreen(isHome: false),
       ];
 
   @override
   void initState() {
+    socketLoad();
     astrologersApi.fetchActiveSession();
     rechargeListApi.fetchUserWallet();
     rechargeListApi.fetchRechargeList();
-
     super.initState();
+  }
+
+  socketLoad() async {
+    await profileApi.fetchProfile();
+    SocketService.initSocket(
+      profileApi.userProfile.value!.id.toString(),
+    );
   }
 
   @override
@@ -90,11 +96,6 @@ class HomeScreenState extends State<HomeScreen> {
             walletIconImagePath: ImageConstant.imgWallet,
             languagePath: 'assets/images/translate_icon.png',
             walletAmountObs: rechargeListApi.userWallet,
-            // walletAmount: rechargeListApi.isLoading.value
-            //     ? ''
-            //     : rechargeListApi.userWallet.value?.data?.wallet?.balance
-            //             .toString() ??
-            //         "0",
           ),
           drawer: CustomDrawer(
             screenHeight: screenHeight,
@@ -134,16 +135,7 @@ class HomeScreenState extends State<HomeScreen> {
             } else {
               return SizedBox.shrink();
             }
-            /*astrologersApi.activeSessionData.value != null &&
-                astrologersApi.activeSessionData.value.data != null
-            ?
-            : null,*/
-          })
-          // bottomNavigationBar: CustomBottomNavigationBar(
-          //   selectedIndex: _selectedIndex,
-          //   onItemTapped: _onItemTapped,
-          // ),
-          ),
+          })),
     );
   }
 }
@@ -164,15 +156,15 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final List<String> icons = [
     ImageConstant.homeInactiveIcon,
     ImageConstant.chatIconNav,
-    ImageConstant.liveInactive, // Home (changed to match image)
-    ImageConstant.callIcon, // Appointment
+    ImageConstant.remedies,
+    ImageConstant.callIcon,
     ImageConstant.profileIcon,
   ];
 
   final List<String> activeIcons = [
     ImageConstant.homeIcon,
     ImageConstant.chatActive,
-    ImageConstant.liveStreamIcon,
+    ImageConstant.remedies,
     ImageConstant.callActiveIcon,
     ImageConstant.profileActiveIcon,
   ];
@@ -180,7 +172,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final List<String> labels = [
     'Home',
     'Chat',
-    'Live',
+    'Astro Mall',
     'Call',
     'Profile',
   ];
@@ -229,7 +221,8 @@ class AnimatedNotchIcon extends StatefulWidget {
   final String label;
   final bool isSelected;
 
-  AnimatedNotchIcon({
+  const AnimatedNotchIcon({
+    super.key,
     required this.icon,
     required this.label,
     required this.isSelected,
@@ -297,59 +290,6 @@ class _AnimatedNotchIconState extends State<AnimatedNotchIcon>
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Notch with Gradient Border
-            // Positioned(
-            //   top: 0,
-            //   child: Transform.translate(
-            //     offset: Offset(0, -_notchAnimation.value),
-            //     child: Stack(
-            //       alignment: Alignment.center,
-            //       children: [
-            //         // Outer container to simulate gradient border
-            //         if (widget.isSelected)
-            //           Container(
-            //             width: 58, // Increased for thicker border (58 - 50 = 4px border)
-            //             height: 58,
-            //             decoration: BoxDecoration(
-            //               gradient: LinearGradient(
-            //                 colors: [Color(0xFFC62828), Color(0xFFF76F72)],
-            //                 // colors: [Colors.white, Colors.white],
-            //                 begin: Alignment.topLeft,
-            //                 end: Alignment.bottomRight,
-            //               ),
-            //               borderRadius: BorderRadius.circular(29),
-            //             ),
-            //           ),
-            //
-            //         // Inner white notch
-            //         // Container(
-            //         //   width: 50,
-            //         //   height: 50,
-            //         //   decoration: BoxDecoration(
-            //         //     color: widget.isSelected ? Colors.white : Colors.transparent,
-            //         //     borderRadius: BorderRadius.circular(25),
-            //         //   ),
-            //         //   child: widget.isSelected
-            //         //       ? Center(
-            //         //     child: Transform.scale(
-            //         //       scale: _scaleAnimation.value,
-            //         //       child: ShaderMask(
-            //         //         shaderCallback: (bounds) => LinearGradient(
-            //         //           colors: [Color(0xFFC62828), Color(0xFFF76F72)],
-            //         //           begin: Alignment.topLeft,
-            //         //           end: Alignment.bottomRight,
-            //         //         ).createShader(bounds),
-            //         //         child:
-            //         //       ),
-            //         //     ),
-            //         //   )
-            //         //       : null,
-            //         // ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // Icon (for inactive state) and Label (fixed position)
             Image.asset(
               widget.icon.toString(),
               color: Colors.white,

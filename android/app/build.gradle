@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.user.astro.kashi.astro_shree_user"
+    namespace = "com.shree.astroshree_user"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,27 +21,27 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.user.astro.kashi.astro_shree_user"
+        applicationId = "com.shree.astroshree_user"
         minSdk = 23
         targetSdk = 35
-        versionCode = 13
-        versionName = '1.0.13'
+        versionCode = 1
+        versionName = '1.0.0'
         multiDexEnabled true
     }
 
 
-    signingConfigs {
-        release {
-            storeFile file('C:\\Users\\Windows 10\\Flutter Projects\\astro_kashi\\android\\app\\astrokashi-key.jks')
-            storePassword 'astrokashi123'
-            keyPassword 'astrokashi123'
-            keyAlias 'astrokashi123'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file('C:\\Users\\Windows 10\\Flutter Projects\\astro_kashi\\android\\app\\astrokashi-key.jks')
+//            storePassword 'astrokashi123'
+//            keyPassword 'astrokashi123'
+//            keyAlias 'astrokashi123'
+//        }
+//    }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             minifyEnabled false
             shrinkResources false
             multiDexEnabled true

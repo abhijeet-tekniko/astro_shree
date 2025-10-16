@@ -35,13 +35,17 @@ class _CallListScreenState extends State<CallListScreen> {
     SocketService.initSocket(
       profileApi.userProfile.value!.id.toString(),
     );
+    SocketService.on('astrologerStatus', _handleAstrologerStatus);
+  }
+
+  void _handleAstrologerStatus(dynamic data) {
+    astrologersApi.handleAstrologerStatus(data);
   }
 
   loading() async {
     checkInternet.hasConnection();
     astrologersApi.fetchAstrologers();
     await profileApi.fetchProfile();
-
   }
 
   final VoiceCallController controller = Get.put(VoiceCallController());
@@ -71,62 +75,55 @@ class _CallListScreenState extends State<CallListScreen> {
           final astrologers = astrologersApi.astrologerList.value;
 
           if (astrologers == null || astrologers.isEmpty) {
-            return const Center(child: Text('No astrologers found.'));
+            return const Center(child: Text('No astrologers Found.'));
           }
 
           return Padding(
             padding: EdgeInsets.all(screenWidth * 0.04),
-            child: Center(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: astrologers.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  final astro = astrologers[index];
-                  return InkWell(
-                    onTap: () {
-                      Get.to(() => AstrologersProfile(astroId: astro.id));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      child: TopAstrologersListCard(
-                        imageUrl:
-                            EndPoints.base + astro.profileImage.toString(),
-                        name: astro.name,
-                        position: astro.speciality
-                            .where((e) => e.status)
-                            .map((e) => e.name)
-                            .join(', '),
-                        language: astro.language.join(', '),
-                        charge: "${astro.pricing.voice}",
-                        comesFrom: 'call',
-                        isCall: true,
-                        isChat: astro.services.chat,
-                        isPopular: index % 3 == 0 ? true : false,
-                        status: astro.status ?? "",
-                        maxDuration: astro.maxWaitingTime ?? "",
-                        experience: astro.experience!.toString(),
-                        onPressed: () {
-                          final isNew = profileApi.isNewUser.value;
-                          if (isNew) {
-                            showFreeChatRequestBS(astro, 'call');
-                          } else {
-                            Get.to(() => CallScreen(
-                                  id: astro.id,
-                                  name: astro.name,
-                                  profileImage: astro.profileImage.toString(),
-                                ));
-                          }
-                        },
-                        onTap: () {
-                          Get.to(() => AstrologersProfile(astroId: astro.id));
-                        },
-                        isBusy: astro.isBusy,
-                      ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: astrologers.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                final astro = astrologers[index];
+                return InkWell(
+                  onTap: () {
+                    Get.to(() => AstrologersProfile(astroId: astro.id));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    child: TopAstrologersListCard(
+                      imageUrl: EndPoints.base + astro.profileImage.toString(),
+                      name: astro.name,
+                      position: astro.speciality
+                          .where((e) => e.status)
+                          .map((e) => e.name)
+                          .join(', '),
+                      language: astro.language.join(', '),
+                      charge: "${astro.pricing.voice}",
+                      comesFrom: 'call',
+                      isCall: true,
+                      isChat: astro.services.chat,
+                      isPopular: index % 3 == 0 ? true : false,
+                      status: astro.status,
+                      maxDuration: astro.maxWaitingTime ?? "",
+                      experience: astro.experience!.toString(),
+                      onPressed: () {
+                        final isNew = profileApi.isNewUser.value;
+                        if (isNew) {
+                          showFreeChatRequestBS(astro, 'call');
+                        } else {
+                          controller.sendVoiceCallRequest(astro.id);
+                        }
+                      },
+                      onTap: () {
+                        Get.to(() => AstrologersProfile(astroId: astro.id));
+                      },
+                      isBusy: astro.isBusy,
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           );
         }),
@@ -232,11 +229,7 @@ class _CallListScreenState extends State<CallListScreen> {
                       if (isAstrologerAvailable)
                         ElevatedButton(
                           onPressed: () {
-                            Get.to(() => CallScreen(
-                                  id: astro.id,
-                                  name: astro.name,
-                                  profileImage: astro.profileImage.toString(),
-                                ));
+                            controller.sendVoiceCallRequest(astro.id);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange.shade600,

@@ -11,6 +11,7 @@ import '../../core/utils/navigator_service.dart';
 import '../../core/utils/themes/appThemes.dart';
 import '../../core/utils/themes/textStyle.dart';
 import '../../data/api_call/profile_api.dart';
+import '../../data/api_call/voice_call_controller.dart';
 import '../../data/model/astrologers_model.dart';
 import '../../routes/app_routes.dart';
 import '../../widget/app_bar/appbar_title.dart';
@@ -39,6 +40,7 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
   final ProfileApi profileApi = Get.put(ProfileApi());
   final AstrologersApi astrologersApi = Get.put(AstrologersApi());
   final giftController = Get.put(UserLiveController());
+  final voiceController = Get.put(VoiceCallController());
 
   bool isVideoCallLoading = false;
 
@@ -54,28 +56,15 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
       },
     );
 
-    if (SocketService.socket == null) {
-      SocketService.initSocket(
-        // profileApi.userProfile.value!.id.toString(), context)
-        profileApi.userProfile.value!.id.toString(),
-      ).then((_) {
-        print('Socket initialized successfully');
-      }).catchError((e) {
-        print('Error initializing socket: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to initialize socket')),
-        );
-      });
-    }
+    SocketService.initSocket(
+      profileApi.userProfile.value!.id.toString(),
+    );
 
-    // Listen for video call request sent to show feedback
     SocketService.on('videoCallRequestSent', (data) {
       print('objectttttttt$data');
     });
 
     SocketService.on('chatRequestSent', _handleChatRequestSent);
-    SocketService.on('chatRequestAccepted', _handleChatRequestAccepted);
-    SocketService.on('chatRequestRejected', _handleChatRequestRejected);
 
     // Handle errors
     SocketService.on('error', (data) {
@@ -93,14 +82,6 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
   void _handleChatRequestSent(dynamic data) {
     chatSocketId = data["chatRequestId"];
     setState(() {});
-  }
-
-  void _handleChatRequestAccepted(dynamic data) {
-    // Navigation handled in SocketService
-  }
-
-  void _handleChatRequestRejected(dynamic data) {
-    // Snackbar handled in SocketService
   }
 
   void _showChatRequestBottomSheet(dynamic astro, String serviceType) {
@@ -522,12 +503,8 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
                                       initiateVideoCall(astro.sId, astro.name);
                                     }
                                   : () {
-                                      Get.to(() => CallScreen(
-                                            id: astro.sId,
-                                            name: astro.name,
-                                            profileImage:
-                                                astro.profileImage.toString(),
-                                          ));
+                                      voiceController
+                                          .sendVoiceCallRequest(astro.sId);
                                     },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange.shade600,
@@ -1222,14 +1199,6 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
                                     msg:
                                         'Astrologer is not available for chat');
                               }
-
-                              ///above shi h
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) =>
-                              //           MemberScreen(id: astrologersApi.astrologerDetail.value.data!.sId!)),
-                              // );
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -1332,14 +1301,6 @@ class _AstrologersProfileState extends State<AstrologersProfile> {
                           Fluttertoast.showToast(
                               msg: 'Astrologer is not available for video');
                         }
-
-                        ///video
-                        // if (astrologersApi.astrologerDetail.value.data!.services!.video == true) {
-                        //   initiateVideoCall(astrologersApi.astrologerDetail.value.data!.sId!);
-                        // } else {
-                        //   Fluttertoast.showToast(
-                        //       msg: 'Astrologer is not available for video');
-                        // }
                       },
                       child: Container(
                         decoration: BoxDecoration(

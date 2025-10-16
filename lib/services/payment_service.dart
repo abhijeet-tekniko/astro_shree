@@ -48,13 +48,13 @@ class PaymentService {
     required BuildContext context,
   }) async {
     var options = {
-      // 'key': 'rzp_test_hCRLFPf6rY3elm',
-      'key': 'rzp_live_RGGYybVG7GgzP9',
+      'key': 'rzp_test_hCRLFPf6rY3elm',
       'order_id': orderId,
       'amount': (double.parse(price) * 100).toInt(),
       'name': 'AstroShree',
-      'description': 'Easy your way of learning',
-      'image': 'http://167.71.232.245:4856/_next/static/media/logo.edad0068.png',
+      'description': '',
+      'image':
+          'http://167.71.232.245:4856/_next/static/media/logo.edad0068.png',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
       'prefill': {

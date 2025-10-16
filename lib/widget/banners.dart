@@ -1,7 +1,7 @@
+import 'package:astro_shree_user/core/network/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../../widget/custom_image_view.dart';
-import '../core/network/endpoints.dart';
 import '../data/model/banner_model.dart';
 
 class BannerCarouselSlider extends StatelessWidget {

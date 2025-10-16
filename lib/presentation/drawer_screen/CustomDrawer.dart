@@ -36,7 +36,6 @@ class CustomDrawer extends StatelessWidget {
       fontWeight: FontWeight.w500,
     );
     return Drawer(
-        //todo add that icon after list tile text
         backgroundColor: Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,

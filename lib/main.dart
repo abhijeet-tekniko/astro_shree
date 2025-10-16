@@ -31,7 +31,6 @@ Future<void> main() async {
       DeviceOrientation.portraitUp,
     ]),
   ]);
-
   final langController = Get.put(LanguageController());
   await langController.loadLanguage();
   Get.put(SocketService());

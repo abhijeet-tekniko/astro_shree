@@ -30,7 +30,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.menuIconImagePath,
     required this.walletIconImagePath,
     required this.profileImagePath,
-    this.onMenuIconTap, /*required this.walletAmount, */required this.languagePath, required this.walletAmountObs,
+    this.onMenuIconTap,
+    /*required this.walletAmount, */ required this.languagePath,
+    required this.walletAmountObs,
   });
 
   @override
@@ -38,110 +40,36 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('AstroShree',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700,color: Color(0xFFC62828)),),
-          // Text('AstroShree',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w700,color: Colors.white),),
-          // AppbarLeadingCircleImage(
-          //   imagePath: logoImagePath,
-          // ),
-
-
-         /* Expanded(
-            child: Center(
-              child: Text(
-                title ?? '',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),*/
-          //  GestureDetector(
-          //   onTap: () {
-          //     NavigatorService.pushNamed(AppRoutes.walletScreen);
-          //   },
-          //   child: Padding(
-          //     padding: const EdgeInsets.only(left: 8.0,top:8.0,bottom: 8.0),
-          //     child: Icon(Icons.search,color: Colors.black,),
-          //   ),
-          // ),
-          // SizedBox(width: 10),
-
-
-
-      /*    SizedBox(width: 16),
-          GestureDetector(
-            onTap: () {
-              NavigatorService.pushNamed(AppRoutes.profileScreen);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0,top:8.0,bottom: 8.0),
-              child: CustomImageView(
-                imagePath: profileImagePath,
-                height: height * 0.035,
-                width: width * 0.080,
-                color: Colors.black,
-              ),
-            ),
-          ),*/
-        ],
+      centerTitle: false,
+      title: Text(
+        'AstroShree',
+        style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFFC62828)),
       ),
       leading: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(10.0),
         child: GestureDetector(
           onTap: onMenuIconTap,
           child: CustomImageView(
-            imagePath: menuIconImagePath,
-          height: 10,
-            width: 17,
-            color: Colors.black,
-          ),
+              imagePath: menuIconImagePath,
+              height: 10,
+              width: 25,
+              color: Color(0xFFC62828)),
         ),
       ),
-      leadingWidth: 40,
+      leadingWidth: 45,
       actions: [
-        IconButton(onPressed: (){
-          Get.to(SearchScreen());
-        }, icon: Icon(Icons.search)),
-
-        // Wallet Icon
-       // Obx((){
-       //   return  GestureDetector(
-       //     onTap: () {
-       //       NavigatorService.pushNamed(AppRoutes.walletScreen);
-       //     },
-       //     child: Container(
-       //       height: 22,
-       //       // width: 80,
-       //       decoration: BoxDecoration(
-       //           borderRadius: BorderRadius.circular(30),
-       //           border: Border.all(color: Colors.black)
-       //       ),
-       //       child: Padding(
-       //         padding: const EdgeInsets.only(left: 8.0,right: 8/*,top:8.0,bottom: 8.0*/),
-       //         child: Row(
-       //           mainAxisSize: MainAxisSize.min,
-       //           mainAxisAlignment: MainAxisAlignment.center,
-       //           crossAxisAlignment: CrossAxisAlignment.center,
-       //           children: [
-       //             CustomImageView(
-       //                 imagePath: walletIconImagePath,
-       //                 height: height * 0.02,
-       //                 width: width * 0.05,
-       //                 color: Colors.black,
-       //                 fit: BoxFit.fill
-       //             ),
-       //             if(walletAmount!=null&&walletAmount!="")
-       //               int.parse(walletAmount)>0?  Text(' ₹ $walletAmount',style: TextStyle(fontWeight: FontWeight.w400,fontSize: 12),):SizedBox.shrink(
-       //               )
-       //           ],
-       //         ),
-       //       ),
-       //     ),
-       //   );
-       // }),
-
+        GestureDetector(
+          onTap: () {
+            Get.to(() => SearchScreen());
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 5.0),
+            child: Icon(Icons.search),
+          ),
+        ),
         Obx(() {
           final balance = walletAmountObs.value?.data?.wallet?.balance ?? 0;
           return GestureDetector(
@@ -163,13 +91,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       imagePath: walletIconImagePath,
                       height: height * 0.02,
                       width: width * 0.05,
-                      color: Colors.black,
+                      color: Color(0xFFC62828),
                       fit: BoxFit.fill,
                     ),
                     if (balance > 0)
-                      Text(' ₹ $balance',
+                      Text(
+                        balance.toString().length > 5
+                            ? ' ₹ ${balance.toString().substring(0, 5)}...'
+                            : ' ₹ $balance',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
+                          color: Color(0xFFC62828),
                           fontSize: 12,
                         ),
                       ),
@@ -179,7 +111,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           );
         }),
-
         SizedBox(width: 5),
         GestureDetector(
           onTap: () {
@@ -196,10 +127,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   imagePath: languagePath,
                   height: height * 0.03,
                   width: width * 0.08,
-                  color: Colors.black,
+                  color: Color(0xFFC62828),
                   // fit: BoxFit.fill
                 ),
-
               ],
             ),
           ),
@@ -210,7 +140,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Get.to(NotificationScreen());
             // NavigatorService.pushNamed(AppRoutes.walletScreen);
           },
-          child: Icon(Icons.notifications_none_outlined,color: Colors.black,size: 20,),
+          child: Icon(
+            Icons.notifications_none_outlined,
+            color: Color(0xFFC62828),
+            size: 20,
+          ),
         ),
         SizedBox(width: 5),
       ],

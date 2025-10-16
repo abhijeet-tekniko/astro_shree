@@ -40,6 +40,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
       loading();
       SocketService.on('astrologerStatus', _handleAstrologerStatus);
       SocketService.on('chatRequestSent', _handleChatRequestSent);
+      SocketService.on('chatRequestAccepted', _handleChatRequestAccepted);
+      SocketService.on('chatRequestRejected', _handleChatRequestRejected);
     });
     SocketService.initSocket(
       profileApi.userProfile.value!.id.toString(),
@@ -47,15 +49,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   }
 
   void _handleAstrologerStatus(dynamic data) {
-    setState(() {
-      final index = astrologersApi.astrologerList.value!
-          .indexWhere((a) => a.id == data['astrologerId']);
-      if (index != -1) {
-        astrologersApi.astrologerList.value![index].status = data['status'];
-        astrologersApi.astrologerList.value![index].isBusy =
-            data['isBusy'] ?? false;
-      }
-    });
+    astrologersApi.handleAstrologerStatus(data);
   }
 
   void _handleChatRequestSent(dynamic data) {

@@ -39,7 +39,7 @@ class SocketService extends GetxController {
       print("Already Connected");
       return;
     }
-
+    print("userIdParam: $userIdParam");
     userId = userIdParam;
 
     socket = IO.io('http://167.71.232.245:4856', <String, dynamic>{
@@ -59,7 +59,6 @@ class SocketService extends GetxController {
 
     socket!.onConnectError((data) {
       print('Connection error: $data');
-      // _showSnackBar('Connection error');
       _notifyListeners('connectError', data);
     });
 
