@@ -38,7 +38,7 @@ class Blog {
   });
 
   factory Blog.fromJson(Map<String, dynamic> json) {
-    String base = "http://167.71.232.245:4856/";
+    String base = "https://admin.astroshri.in/";
     return Blog(
       id: json['_id'],
       title: json['title'],

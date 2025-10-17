@@ -301,7 +301,7 @@ class _ChatNewwScreenState extends State<ChatNewwScreen> {
 
         print('apiFile========$formData');
         final response = await dio.post(
-          'http://167.71.232.245:4856/api/user/send',
+          'https://admin.astroshri.in/api/user/send',
           data: formData,
           options: dioClient.Options(
             contentType: 'multipart/form-data',
@@ -809,7 +809,7 @@ class _ChatNewwScreenState extends State<ChatNewwScreen> {
                                     print(m);
                                     print('m]=====${m['type']}');
                                     final url =
-                                        'http://167.71.232.245:4856/${m['url']}';
+                                        'https://admin.astroshri.in/${m['url']}';
                                     if (m['type'] == 'image') {
                                       return GestureDetector(
                                         onTap: () => _launchURL(url),

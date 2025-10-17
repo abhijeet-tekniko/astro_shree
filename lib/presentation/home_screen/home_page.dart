@@ -1118,156 +1118,166 @@ class _HomePageState extends State<HomePage> {
                           )
                         : SizedBox.shrink(),
 
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: screenWidth * 0.020,
-                          horizontal: screenWidth * 0.025),
-                      height: screenHeight * 0.20,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: blogApi.reviewData.length > 4
-                            ? 4
-                            : blogApi.reviewData.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final reviewData = blogApi.reviewData[index];
-                          return Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            width: screenWidth * 0.75,
-                            child: GestureDetector(
-                              onTap: () {
-                                // NavigatorService.pushNamed(
-                                //   AppRoutes.blogDetailedScreen,
-                                // );
+                    blogApi.reviewData.isNotEmpty
+                        ? Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenWidth * 0.020,
+                                horizontal: screenWidth * 0.025),
+                            height: screenHeight * 0.20,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: blogApi.reviewData.length > 4
+                                  ? 4
+                                  : blogApi.reviewData.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                final reviewData = blogApi.reviewData[index];
+                                return Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  width: screenWidth * 0.75,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // NavigatorService.pushNamed(
+                                      //   AppRoutes.blogDetailedScreen,
+                                      // );
+                                    },
+                                    child: Card(
+                                      color: Colors.white,
+                                      elevation: 5,
+                                      shadowColor: Colors.grey,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 5,
+                                            ),
+                                            width: screenWidth * 0.75,
+                                            height: screenHeight * 0.09,
+                                            child: Text(
+                                              reviewData.message.toString(),
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.normal,
+                                                color: Colors.black,
+                                              ),
+                                              maxLines: 3,
+                                              softWrap: true,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 5,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle),
+                                                    child: CustomImageView(
+                                                      height:
+                                                          screenHeight * 0.06,
+                                                      // width: screenWidth * 0.15,
+                                                      imagePath: reviewData
+                                                                  .user !=
+                                                              null
+                                                          ? (EndPoints
+                                                                  .imageBaseUrl +
+                                                              reviewData.user!
+                                                                  .profileImage
+                                                                  .toString())
+                                                          : "https://admin.astroshri.in/images/logo.jpg",
+                                                      radius:
+                                                          BorderRadius.circular(
+                                                              40),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                          reviewData.user?.name
+                                                                  .toString()
+                                                                  .capitalizeFirst ??
+                                                              "TestName",
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                      // Text("Delhi"),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Text(
+                                                    "26-Jan-2025",
+                                                    style: TextStyles.bodyText2,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.star,
+                                                        size: 18,
+                                                        color: Colors.yellow,
+                                                      ),
+                                                      SizedBox(width: 3),
+                                                      Icon(
+                                                        Icons.star,
+                                                        size: 18,
+                                                        color: Colors.yellow,
+                                                      ),
+                                                      SizedBox(width: 3),
+                                                      Icon(
+                                                        Icons.star,
+                                                        size: 18,
+                                                        color: Colors.yellow,
+                                                      ),
+                                                      SizedBox(width: 3),
+                                                      Icon(
+                                                        Icons.star,
+                                                        size: 18,
+                                                        color: Colors.yellow,
+                                                      ),
+                                                      SizedBox(width: 3),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
                               },
-                              child: Card(
-                                color: Colors.white,
-                                elevation: 5,
-                                shadowColor: Colors.grey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 5,
-                                      ),
-                                      width: screenWidth * 0.75,
-                                      height: screenHeight * 0.09,
-                                      child: Text(
-                                        reviewData.message.toString(),
-                                        // 'Korem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.Korem ipsum dolor sit amet, consectetur adipiscing elit. ',
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.black,
-                                        ),
-                                        maxLines: 3,
-                                        softWrap: true,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle),
-                                              child: CustomImageView(
-                                                height: screenHeight * 0.06,
-                                                // width: screenWidth * 0.15,
-                                                imagePath:
-                                                    EndPoints.imageBaseUrl +
-                                                        reviewData
-                                                            .user!.profileImage
-                                                            .toString(),
-                                                radius:
-                                                    BorderRadius.circular(40),
-                                                // imagePath: ImageConstant
-                                                //     .customerImage,
-                                                // fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                    reviewData.user!.name
-                                                            .toString()
-                                                            .capitalizeFirst ??
-                                                        "",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                                // Text("Delhi"),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              "26-Jan-2025",
-                                              style: TextStyles.bodyText2,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.star,
-                                                  size: 18,
-                                                  color: Colors.yellow,
-                                                ),
-                                                SizedBox(width: 3),
-                                                Icon(
-                                                  Icons.star,
-                                                  size: 18,
-                                                  color: Colors.yellow,
-                                                ),
-                                                SizedBox(width: 3),
-                                                Icon(
-                                                  Icons.star,
-                                                  size: 18,
-                                                  color: Colors.yellow,
-                                                ),
-                                                SizedBox(width: 3),
-                                                Icon(
-                                                  Icons.star,
-                                                  size: 18,
-                                                  color: Colors.yellow,
-                                                ),
-                                                SizedBox(width: 3),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          )
+                        : SizedBox.shrink(),
 
                     ///NewsKashi
                     blogApi.news.isNotEmpty

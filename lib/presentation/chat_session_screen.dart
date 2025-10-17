@@ -375,7 +375,7 @@ class _ChatSessionDetailsScreenState extends State<ChatSessionDetailsScreen> {
                                 runSpacing: 5,
                                 children: media.map((m) {
                                   final url =
-                                      'http://167.71.232.245:4856/${m.url}';
+                                      'https://admin.astroshri.in/${m.url}';
                                   if (m.type == 'image') {
                                     print(url);
                                     return GestureDetector(

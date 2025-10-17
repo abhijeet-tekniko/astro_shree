@@ -8,7 +8,7 @@ class DioClient {
   DioClient()
     : _dio = Dio(
         BaseOptions(
-          baseUrl: 'http://167.71.232.245:4856',
+          baseUrl: 'https://admin.astroshri.in',
           connectTimeout: const Duration(seconds: 25),
           receiveTimeout: const Duration(seconds: 25),
           sendTimeout: const Duration(seconds: 25),

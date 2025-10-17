@@ -2,8 +2,8 @@ class EndPoints {
 
   // static String base = "http://167.71.232.245:8968/";
   // static String imageBaseUrl = "http://167.71.232.245:8968/";
-  static String base = "http://167.71.232.245:4856/";
-  static String imageBaseUrl = "http://167.71.232.245:4856/";
+  static String base = "https://admin.astroshri.in/";
+  static String imageBaseUrl = "https://admin.astroshri.in/";
   static String path = "/api/user";
 
   ///Authentication

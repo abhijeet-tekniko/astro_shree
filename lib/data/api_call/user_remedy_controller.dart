@@ -40,7 +40,7 @@ class UserRemedyController extends GetxController {
       final token = await PrefsUtils.getString(PrefsKeys.userToken);
 
       final response = await _dio.get(
-        'http://167.71.232.245:4856/api/user/suggestedProduct',
+        'https://admin.astroshri.in/api/user/suggestedProduct',
         queryParameters: {
           "page": currentPage.value,
           "limit": pageSize,
@@ -75,7 +75,7 @@ class UserRemedyController extends GetxController {
   void fetchCategories() async {
     try {
       final token = await PrefsUtils.getString(PrefsKeys.userToken);
-      final response = await _dio.get('http://167.71.232.245:4856/api/user/category',  options: Options(
+      final response = await _dio.get('https://admin.astroshri.in/api/user/category',  options: Options(
         headers: {
           'Authorization': 'Bearer $token',
         },

@@ -42,7 +42,7 @@ class SocketService extends GetxController {
     print("userIdParam: $userIdParam");
     userId = userIdParam;
 
-    socket = IO.io('http://167.71.232.245:4856', <String, dynamic>{
+    socket = IO.io('https://admin.astroshri.in', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
       'reconnection': true,
@@ -496,7 +496,7 @@ class UserSocketService {
 
   void _initSocket() {
     _socket = IO.io(
-      'http://167.71.232.245:4856',
+      'https://admin.astroshri.in',
       <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': true,

@@ -55,7 +55,8 @@ class HomeScreenState extends State<HomeScreen> {
   List<Widget> get _pages => [
         HomePage(onItemSelected: _onItemTapped),
         ChatListScreen(),
-        RemediesHome(),
+        // RemediesHome(),
+        AstrologerListScreen(),
         CallListScreen(),
         ProfileScreen(isHome: false),
       ];
@@ -156,7 +157,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final List<String> icons = [
     ImageConstant.homeInactiveIcon,
     ImageConstant.chatIconNav,
-    ImageConstant.remedies,
+    ImageConstant.liveInactive,
     ImageConstant.callIcon,
     ImageConstant.profileIcon,
   ];
@@ -164,7 +165,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final List<String> activeIcons = [
     ImageConstant.homeIcon,
     ImageConstant.chatActive,
-    ImageConstant.remedies,
+    ImageConstant.liveRed,
     ImageConstant.callActiveIcon,
     ImageConstant.profileActiveIcon,
   ];
@@ -172,7 +173,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final List<String> labels = [
     'Home',
     'Chat',
-    'Astro Mall',
+    'Live',
     'Call',
     'Profile',
   ];

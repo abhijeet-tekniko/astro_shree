@@ -53,8 +53,7 @@ class PaymentService {
       'amount': (double.parse(price) * 100).toInt(),
       'name': 'AstroShree',
       'description': '',
-      'image':
-          'http://167.71.232.245:4856/_next/static/media/logo.edad0068.png',
+      'image': 'https://admin.astroshri.in/images/logo.jpg',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
       'prefill': {
